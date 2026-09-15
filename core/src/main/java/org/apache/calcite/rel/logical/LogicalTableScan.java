@@ -30,6 +30,8 @@ import org.apache.calcite.schema.Table;
 
 import com.google.common.collect.ImmutableList;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.List;
 
 /**
@@ -97,6 +99,14 @@ public final class LogicalTableScan extends TableScan {
 
   @Override public RelWriter explainTerms(RelWriter pw) {
     return super.explainTerms(pw).itemIf("hints", getHints(), !getHints().isEmpty());
+  }
+
+  @Override public boolean deepEquals(@Nullable Object obj) {
+    return deepEquals0(obj);
+  }
+
+  @Override public int deepHashCode() {
+    return deepHashCode0();
   }
 
   /** Creates a LogicalTableScan.

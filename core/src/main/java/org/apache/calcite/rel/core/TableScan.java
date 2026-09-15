@@ -40,6 +40,8 @@ import org.apache.calcite.util.ImmutableIntList;
 
 import com.google.common.collect.ImmutableList;
 
+import org.apiguardian.api.API;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.ArrayList;
@@ -126,6 +128,28 @@ public abstract class TableScan
   @Override public RelWriter explainTerms(RelWriter pw) {
     return super.explainTerms(pw)
         .item("table", table.getQualifiedName());
+  }
+
+  @API(since = "1.43", status = API.Status.INTERNAL)
+  @EnsuresNonNullIf(expression = "#1", result = true)
+  protected boolean deepEquals0(@Nullable Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    TableScan o = (TableScan) obj;
+    return traitSet.equals(o.traitSet)
+        && table.equals(o.table)
+        && hints.equals(o.hints);
+  }
+
+  @API(since = "1.43", status = API.Status.INTERNAL)
+  protected int deepHashCode0() {
+    int result = 31 + traitSet.hashCode();
+    result = result * 31 + table.hashCode();
+    return result * 31 + hints.hashCode();
   }
 
   /**
